@@ -14,13 +14,14 @@ export function getAuthCode(): string | null {
   return params.get("code");
 }
 
-// Step 1: Redirect to Spotify for login
+// Initiate OAuth flow by redirecting user to Spotify authorization page
 export async function redirectToAuthCodeFlow(clientId: string) {
   const verifier = generateCodeVerifier(128);
   const challenge = await generateCodeChallenge(verifier);
 
   localStorage.setItem("verifier", verifier);
 
+   // Build query parameters for Spotify OAuth
   const params = new URLSearchParams();
   params.append("client_id", clientId);
   params.append("response_type", "code");
@@ -29,10 +30,11 @@ export async function redirectToAuthCodeFlow(clientId: string) {
   params.append("code_challenge_method", "S256");
   params.append("code_challenge", challenge);
 
+  // Redirect user to Spotify authorization page
   document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
 
-// Step 2: Exchange the code for an access token
+// Exchange authorization code for access token
 export async function getAccessToken(clientId: string, code: string): Promise<string> {
   const verifier = localStorage.getItem("verifier");
   if (!verifier) throw new Error("No code verifier found.");
@@ -43,7 +45,6 @@ export async function getAccessToken(clientId: string, code: string): Promise<st
   params.append("code", code);
   params.append("redirect_uri", redirectURI);
   params.append("code_verifier", verifier);
-  
 
 
   const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -69,6 +70,7 @@ export async function getAccessToken(clientId: string, code: string): Promise<st
 return data.access_token;
 }
 
+// Utility function: Generate a random string for PKCE code verifier
 function generateCodeVerifier(length: number) {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -79,6 +81,7 @@ function generateCodeVerifier(length: number) {
     return text;
 }
 
+// Utility function: Generate SHA-256 based code challenge from verifier (PKCE)
 async function generateCodeChallenge(codeVerifier: string) {
     const data = new TextEncoder().encode(codeVerifier);
     const digest = await window.crypto.subtle.digest('SHA-256', data);

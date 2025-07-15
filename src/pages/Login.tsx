@@ -5,6 +5,8 @@ import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 
 const clientID: string = import.meta.env.VITE_SPOTIFY_CLIENT_ID as string;
 
+
+
 const Login: React.FC = () => {
   const handleLogin = async () => {
       await redirectToAuthCodeFlow(clientID);
