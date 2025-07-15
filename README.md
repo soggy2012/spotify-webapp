@@ -1,7 +1,12 @@
 # Blue - Spotify Web App
 
 Blue is a React + TypeScript web application that integrates with the Spotify API.  
-It allows users to:
+
+**🔗 Live Demo:**  
+https://spotify-webapp-eight.vercel.app/
+
+---
+## Features
 
 - Search for tracks
 - Build a custom playlist
