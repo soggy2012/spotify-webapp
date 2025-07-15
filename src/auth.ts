@@ -2,7 +2,7 @@
 //Client ID from Spotify Developer Dashboard (.env file)
 
 //Redirect URI where Spotify will send the user after authorization
-const redirectURI:string = "http://127.0.0.1:5173/callback";
+const redirectURI:string = "https://spotify-webapp-eight.vercel.app/callback";
 
 // Parse the authorization code from the URL
 export function getAuthCode(): string | null {
