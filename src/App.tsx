@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
+import { Transition } from '@headlessui/react';
 import './App.css'
 import './index.css'
 
@@ -209,7 +210,8 @@ const App = () => {
             />
 
             {showDropdown && tracks.length > 0 && (
-              <ul className="absolute top-full mt-1 w-full  bg-white text-black shadow-lg rounded z-50 max-h-64 overflow-y-auto">
+              <ul className={`absolute top-full mt-1 w-full  bg-white text-black shadow-lg rounded z-50 max-h-64 overflow-y-auto transition-all duration-200 transform
+              ${showDropdown ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}>
                 {tracks.map((track) => (
                   <li key={track.id} className="p-2 hover:bg-gray-100">
                     <div className="flex items-center gap-2">
@@ -253,21 +255,33 @@ const App = () => {
 
               <ul>
                 {playlist.map((track) => (
-                  <li key={track.id} className="text-sm mb-1">
-                    <div className='flex  justify-between items-center my-2 py-1 px-4 bg- rounded-xl bg-gray-600'>
-                      <div className='flex items-center gap-2'>
-                        {track.album?.images?.[2]?.url && (
-                        <img src={track.album.images[2].url} alt={track.name} className="w-8 h-8 rounded" />
-                        )}
-                        {track.name} - {track.artists.map((a) => a.name).join(", ")}
+                  <Transition
+                    key={track.id}
+                    appear={true}
+                    show={true}
+                    enter="transition-all duration-300 ease-out"
+                    enterFrom="opacity-0 -translate-y-2"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition-all duration-200 ease-in"
+                    leaveFrom="opacity-100 translate-y-0"
+                    leaveTo="opacity-0 translate-y-2"
+                  >
+                    <li className="text-sm mb-1">
+                      <div className='flex  justify-between items-center my-2 py-1 px-4 bg- rounded-xl bg-gray-600'>
+                        <div className='flex items-center gap-2'>
+                          {track.album?.images?.[2]?.url && (
+                          <img src={track.album.images[2].url} alt={track.name} className="w-8 h-8 rounded" />
+                          )}
+                          {track.name} - {track.artists.map((a) => a.name).join(", ")}
+                        </div>
+                        <button
+                        onClick={() => removeFromPlaylist(track.id)} 
+                        className="text-red 500 hover:text-red-700 p-2 text-lg font-bold">
+                          x
+                        </button>
                       </div>
-                      <button
-                      onClick={() => removeFromPlaylist(track.id)} 
-                      className="text-red 500 hover:text-red-700 p-2 text-lg font-bold">
-                        x
-                      </button>
-                    </div>
-                  </li>
+                    </li>
+                  </Transition>
                 ))}
               </ul>
 
