@@ -1,9 +1,5 @@
 //Stores Spotify auth configoration and builds login URL
-
 //Client ID from Spotify Developer Dashboard (.env file)
-
-// :string is used to ensure the type is a string
-const clientID:string = import.meta.env.VITE_SPOTIFY_CLIENT_ID as string;
 
 //Redirect URI where Spotify will send the user after authorization
 const redirectURI:string = "http://127.0.0.1:5173/callback";
